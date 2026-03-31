@@ -1,0 +1,40 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfstate.d/
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Terraform variable files (may contain secrets)
+*.tfvars
+*.tfvars.json
+!*.example.tfvars
+
+# Terraform plan files
+*.tfplan
+
+# AWS credentials / config
+.aws/
+*.pem
+*.key
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor
+.idea/
+.vscode/
+.claude/
+*.swp
+*.swo
+*~
