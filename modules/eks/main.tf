@@ -12,14 +12,23 @@ resource "aws_eks_cluster" "main" {
     authentication_mode = "API"
   }
 
-  role_arn = aws_iam_role.cluster.arn
-  version  = var.cluster_version
+  role_arn                  = aws_iam_role.cluster.arn
+  version                   = var.cluster_version
+  enabled_cluster_log_types = var.cluster_log_types
 
   vpc_config {
     endpoint_private_access = true
     endpoint_public_access  = true
+    public_access_cidrs     = var.public_access_cidrs
 
     subnet_ids = var.private_subnets_ids
+  }
+
+  encryption_config {
+    resources = ["secrets"]
+    provider {
+      key_arn = var.secrets_kms_key_arn
+    }
   }
 
   depends_on = [

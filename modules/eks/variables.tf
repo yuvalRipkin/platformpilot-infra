@@ -78,3 +78,20 @@ variable "project_name" {
   description = "Project name tag that will be added to all resources"
   default     = "platformpilot"
 }
+
+variable "secrets_kms_key_arn" {
+  description = "ARN of the KMS key used to encrypt Kubernetes secrets at rest."
+  type        = string
+}
+
+variable "public_access_cidrs" {
+  description = "List of CIDR blocks allowed to reach the EKS public API endpoint. Restrict to known IPs (e.g. your office/VPN CIDR) rather than 0.0.0.0/0."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "cluster_log_types" {
+  description = "EKS control plane log types to send to CloudWatch."
+  type        = list(string)
+  default     = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+}

@@ -30,11 +30,23 @@ module "vpc" {
 module "eks" {
   source = "../../modules/eks"
 
-  cluster_name       = "platformpilot-dev"
-  cluster_version    = "1.31"
-  vpc_id             = module.vpc.vpc_id
+  cluster_name        = "platformpilot-dev"
+  cluster_version     = "1.31"
+  vpc_id              = module.vpc.vpc_id
   private_subnets_ids = module.vpc.private_subnets_ids
-  environment        = "dev"
+  environment         = "dev"
+  secrets_kms_key_arn = aws_kms_key.eks_secrets.arn
+}
+
+resource "aws_kms_key" "eks_secrets" {
+  description             = "KMS key for EKS secrets encryption"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+}
+
+resource "aws_kms_alias" "eks_secrets" {
+  name          = "alias/platformpilot-eks-secrets"
+  target_key_id = aws_kms_key.eks_secrets.key_id
 }
 
 resource "aws_kms_key" "ecr" {

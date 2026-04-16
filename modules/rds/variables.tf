@@ -52,16 +52,11 @@ variable "username" {
   }
 }
 
-variable "password" {
-  description = "Master password for the RDS instance. Cannot be changed after creation."
-  type        = string
-  sensitive   = true
-  validation {
-    condition     = length(var.password) >= 8
-    error_message = "Password must be longer than 8 characters."
-  }
+variable "deletion_protection" {
+  description = "If true, prevents the RDS instance from being deleted. Recommended for production."
+  type        = bool
+  default     = false
 }
-
 
 variable "multi_az" {
   description = "Enables a standby replica in a second AZ for automatic failover."
