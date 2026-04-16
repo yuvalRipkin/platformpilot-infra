@@ -36,3 +36,22 @@ module "eks" {
   private_subnets_ids = module.vpc.private_subnets_ids
   environment        = "dev"
 }
+
+resource "aws_kms_key" "ecr" {
+  description             = "KMS key for ECR image encryption"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+}
+
+resource "aws_kms_alias" "ecr" {
+  name          = "alias/platformpilot-ecr"
+  target_key_id = aws_kms_key.ecr.key_id
+}
+
+module "ecr" {
+  source               = "../../modules/ecr"
+  repo_name            = "platformpilot-operator"
+  kms_key_arn          = aws_kms_key.ecr.arn
+  image_max_count      = 5
+  image_tag_mutability = "IMMUTABLE"
+}
